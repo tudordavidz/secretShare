@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  secrets   Secret[]
+  
+  @@map("users")
+}
+
+model Secret {
+  id              String    @id @default(cuid())
+  title           String?
+  content         String
+  slug            String    @unique
+  password        String?
+  expiresAt       DateTime?
+  isOneTimeAccess Boolean   @default(false)
+  hasBeenAccessed Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  accessLogs      AccessLog[]
+  
+  @@map("secrets")
+}
+
+model AccessLog {
+  id        String   @id @default(cuid())
+  secretId  String
+  ipAddress String?
+  userAgent String?
+  accessedAt DateTime @default(now())
+  
+  secret    Secret   @relation(fields: [secretId], references: [id], onDelete: Cascade)
+  
+  @@map("access_logs")
+}
