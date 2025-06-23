@@ -1,103 +1,194 @@
-import Image from "next/image";
+"use client";
+
+import React from "react";
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Card,
+  CardContent,
+  Avatar,
+  Chip,
+} from "@mui/material";
+import { Security, Timer, Password, Visibility } from "@mui/icons-material";
+import { Navigation } from "@/components/Navigation";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const router = useRouter();
+  const { user } = useAuth();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const features = [
+    {
+      icon: <Security />,
+      title: "Secure Sharing",
+      description: "End-to-end encrypted secrets with secure password hashing",
+    },
+    {
+      icon: <Timer />,
+      title: "Time-Limited",
+      description: "Set expiration times to automatically delete secrets",
+    },
+    {
+      icon: <Password />,
+      title: "Password Protected",
+      description: "Add optional password protection for extra security",
+    },
+    {
+      icon: <Visibility />,
+      title: "One-Time Access",
+      description: "Secrets that self-destruct after first viewing",
+    },
+  ];
+
+  return (
+    <>
+      <Navigation />
+      <Container maxWidth="lg">
+        <Box sx={{ py: 8, textAlign: "center" }}>
+          {/* Hero Section */}
+          <Typography variant="h1" component="h1" gutterBottom>
+            Share Secrets{" "}
+            <Typography
+              component="span"
+              variant="h1"
+              sx={{ color: "primary.main" }}
+            >
+              Securely
+            </Typography>
+          </Typography>
+
+          <Typography
+            variant="h5"
+            color="text.secondary"
+            sx={{ mb: 4, maxWidth: 600, mx: "auto" }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Create time-limited, password-protected secrets that vanish after
+            access. Perfect for sharing sensitive information safely.
+          </Typography>
+
+          <Box
+            sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 8 }}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => router.push("/create")}
+              sx={{ minWidth: 160 }}
+            >
+              Create Secret
+            </Button>
+            {!user && (
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={() => router.push("/register")}
+                sx={{ minWidth: 160 }}
+              >
+                Get Started
+              </Button>
+            )}
+          </Box>
+
+          {/* Features Grid */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: 4,
+              mb: 8,
+            }}
+          >
+            {features.map((feature, index) => (
+              <Card
+                key={index}
+                sx={{ height: "100%", textAlign: "center", p: 2 }}
+              >
+                <CardContent>
+                  <Avatar
+                    sx={{
+                      bgcolor: "primary.main",
+                      width: 56,
+                      height: 56,
+                      mx: "auto",
+                      mb: 2,
+                    }}
+                  >
+                    {feature.icon}
+                  </Avatar>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+
+          {/* How It Works */}
+          <Box sx={{ textAlign: "left", maxWidth: 800, mx: "auto" }}>
+            <Typography
+              variant="h3"
+              component="h2"
+              textAlign="center"
+              gutterBottom
+            >
+              How It Works
+            </Typography>
+
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                gap: 4,
+                mt: 4,
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+                <Chip label="1" color="primary" />
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    Create Your Secret
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Enter your sensitive information and configure security
+                    settings
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+                <Chip label="2" color="primary" />
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    Share the Link
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Get a unique, secure URL to share with your intended
+                    recipient
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+                <Chip label="3" color="primary" />
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    Auto-Delete
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Secret automatically expires and is permanently deleted
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Container>
+    </>
   );
 }
