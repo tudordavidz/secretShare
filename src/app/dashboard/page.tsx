@@ -127,7 +127,7 @@ export default function DashboardPage() {
       updateMutation.mutate({
         id: selectedSecret.id,
         title: editForm.title || undefined,
-        expiresAt: editForm.expiresAt ? new Date(editForm.expiresAt) : undefined,
+        expiresAt: editForm.expiresAt ? new Date(editForm.expiresAt).toISOString() : undefined,
       });
     }
   };

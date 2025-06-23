@@ -69,13 +69,13 @@ export default function CreateSecretPage() {
       setError(null);
       setSuccess(null);
 
-      let expiresAt: Date | undefined;
+      let expiresAt: string | undefined;
       
       if (data.expirationOption !== 'never' && data.expirationOption !== 'custom') {
         const hours = parseInt(data.expirationOption);
-        expiresAt = dayjs().add(hours, 'hour').toDate();
+        expiresAt = dayjs().add(hours, 'hour').toISOString();
       } else if (data.expirationOption === 'custom' && data.expiresAt) {
-        expiresAt = data.expiresAt;
+        expiresAt = dayjs(data.expiresAt).toISOString();
       }
 
       const result = await createSecretMutation.mutateAsync({

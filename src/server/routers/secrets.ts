@@ -12,7 +12,7 @@ export const secretRouter = router({
         title: z.string().optional(),
         content: z.string().min(1, 'Content is required'),
         password: z.string().optional(),
-        expiresAt: z.date().optional(),
+        expiresAt: z.string().optional().transform((val) => val ? new Date(val) : undefined),
         isOneTimeAccess: z.boolean().default(false),
       })
     )
@@ -288,7 +288,7 @@ export const secretRouter = router({
       z.object({
         id: z.string(),
         title: z.string().optional(),
-        expiresAt: z.date().optional(),
+        expiresAt: z.string().optional().transform((val) => val ? new Date(val) : undefined),
       })
     )
     .mutation(async ({ input, ctx }) => {
